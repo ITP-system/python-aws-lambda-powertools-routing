@@ -5,11 +5,24 @@ Description: >
 
   Sample SAM Template for sam
 
+Parameters:
+  Environment:
+    Description: Enviroment Name
+    Type: String
+    Default: "dev"
+  APIVersion:
+    Description: API Version
+    Type: String
+    Default: "v1"
+
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
     Timeout: 60
-
+    Environment:
+      Variables:
+        API_VERSION: !Ref APIVersion
+  
 Resources:
   SampleFunction:
     Type: AWS::Serverless::Function
@@ -30,7 +43,7 @@ Resources:
   HttpApi:
     Type: AWS::Serverless::HttpApi
     Properties:
-      StageName: "dev"
+      StageName: !Sub ${Environment}
       DefaultRouteSettings:
         ThrottlingBurstLimit: 200
       RouteSettings:
